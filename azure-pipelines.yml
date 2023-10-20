@@ -40,3 +40,11 @@ steps:
     downloadType: 'single'
     artifactName: 'drop'
     downloadPath: '$(System.ArtifactsDirectory)'
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure Pass - Sponsorship(0bd39bae-4eb7-44a7-ab85-603e06117254)'
+    appType: 'webApp'
+    WebAppName: 'WebAppvanLau'
+    packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
