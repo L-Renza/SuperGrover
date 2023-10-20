@@ -10,13 +10,13 @@ stages:
   jobs:
   - job: Build
 
-  pool:
-    name: 'default'
+    pool:
+      name: default
 
-  variables:
-    solution: '**/*.sln'
-    buildPlatform: 'Any CPU'
-    buildConfiguration: 'Release'
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
 
     steps:
     - task: NuGetToolInstaller@1
@@ -32,31 +32,35 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
-
 - stage: Deploy
-    dependsOn: Build
-    jobs:
-    - job: Deploy
-      pool:
-        name: default
+  dependsOn: Build
+  jobs:
+  - job: Deploy
+    pool:
+      name: default
 
-steps:
-  - task: DownloadBuildArtifacts@1
-    inputs:
-      buildType: 'current'
-      downloadType: 'single'
-      artifactName: 'drop'
-      downloadPath: '$(System.ArtifactsDirectory)'
+    steps:
 
-  - task: AzureRmWebAppDeployment@4
-    inputs:
-      ConnectionType: 'AzureRM'
-      azureSubscription: 'Azure Pass - Sponsorship(0bd39bae-4eb7-44a7-ab85-603e06117254)'
-      appType: 'webApp'
-      WebAppName: 'WebAppvanLau'
-      packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
+
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Azure Pass - Sponsorship(0bd39bae-4eb7-44a7-ab85-603e06117254)'
+        appType: 'webApp'
+        WebAppName: 'WebAppvanLau'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
