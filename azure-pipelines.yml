@@ -43,7 +43,7 @@ stages:
   jobs:
   - job: Deploy
     pool:
-      name: dafault
+      name: default
 
 steps:
 
