@@ -46,7 +46,6 @@ stages:
       name: default
 
 steps:
-
   - task: DownloadBuildArtifacts@1
     inputs:
       buildType: 'current'
