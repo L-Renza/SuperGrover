@@ -18,7 +18,7 @@ stages:
     buildPlatform: 'Any CPU'
     buildConfiguration: 'Release'
 
-  steps:
+ steps:
   - task: NuGetToolInstaller@1
 
   - task: NuGetCommand@2
